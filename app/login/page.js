@@ -81,8 +81,8 @@ const Login = () => {
           <form noValidate autoComplete="off">
             <TextField
               id="email-login"
-              label="Correo Electrónico"
-              placeholder='Ingrese su correo electrónico...'
+              label="Username"
+              placeholder='Enter a email...'
               type="email"
               margin="normal"
               value={email}
@@ -90,15 +90,15 @@ const Login = () => {
               fullWidth />
             <TextField
               id="email-password"
-              label="Contraseña"
+              label="Password"
               type="password"
-              placeholder='Ingrese su contraseña...'
+              placeholder='Enter a password...'
               margin="normal"
               value={password}
               onChange={e => setPassword(e.target.value)}
               fullWidth />
             <LoginButton variant="contained" color="primary" fullWidth onClick={singIn}>
-              Iniciar Sesión
+              Log in
             </LoginButton>
           </form>
         </CardContent>
