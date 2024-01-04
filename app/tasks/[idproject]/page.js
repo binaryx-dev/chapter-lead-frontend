@@ -71,11 +71,11 @@ const TasksForProjectPage = () => {
           <EmptyTask severity="warning">Ups... Proyecto no encontrado!!!</EmptyTask>
         )}
         {(project) && (
-          <Task key={`projects-${project.id}`} middle sx={{
+          <Task key={`projects-${project.id}`} middle="true" sx={{
             background: `linear-gradient(-45deg, ${project.colorTasks[0]}, ${project.colorTasks[1]}, ${project.colorTasks[2]})`
           }}>
             <TaskContainer>
-              <TaskButton small>
+              <TaskButton small="true">
                 <AddButton variant="contained" onClick={() => router.push("/")}>
                   <ArrowBackIosIcon fontSize="inherit" />
                 </AddButton>
@@ -95,7 +95,7 @@ const TasksForProjectPage = () => {
                   <Typography variant="subtitle1" color={"white"}>tasks</Typography>
                 </Box>
               </TaskContent>
-              <TaskButton middle>
+              <TaskButton middle="true">
                 <AddButton variant="contained" onClick={() => router.push(`/tasks/${idproject}/adding`)}>
                   <AddIcon fontSize="inherit" />
                 </AddButton>
