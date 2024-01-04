@@ -79,7 +79,7 @@ export const StartApp = () => {
                 </Box>
               </TaskContent>
               <TaskButton>
-                <MoreButton variant="outlined" onClick={() => router.push(`/tasks/${project.id}`)}>
+                <MoreButton variant="outlined" onClick={() => console.log("Este componente está bloqueado")}>
                   <MoreHoriz fontSize="inherit" />
                 </MoreButton>
                 <AddButton variant="contained" onClick={() => router.push(`/tasks/${project.id}`)}>

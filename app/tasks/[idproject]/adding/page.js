@@ -86,7 +86,7 @@ const TaskAdding = () => {
       <CreateContainer>
         <TaskCard elevation={0}>
           <CardContent>
-            <CircleButton variant="outlined" sx={{marginLeft: theme.spacing(1)}} onClick={() => router.push("/")}>
+            <CircleButton variant="outlined" sx={{marginLeft: theme.spacing(1)}} onClick={() => router.push(`/tasks/${idproject}`)}>
               <CloseIcon fontSize="inherit" />
             </CircleButton>
             <Title variant='h3'>New Task</Title>

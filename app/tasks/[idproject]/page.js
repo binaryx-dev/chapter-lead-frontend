@@ -1,14 +1,13 @@
 'use client'
 import BaseLayout from "@/components/BaseLayout/index.js";
 import CheckBox from "@/components/CheckBox/index.js";
-import { AddButton, EmptyTask, MoreButton, Task, TaskButton, TaskContainer, TaskContent, TaskTitle } from "@/components/Task/index.js";
+import { AddButton, EmptyTask, Task, TaskButton, TaskContainer, TaskContent, TaskTitle } from "@/components/Task/index.js";
 import VerticalProgress from "@/components/VerticalProgress/index.js";
 import percent from "@/functions/percent.js";
 import useProject from "@/hooks/useProject/index.js";
 import styled from "@emotion/styled";
-import { MoreHoriz, Add as AddIcon, Add } from "@mui/icons-material";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Accordion, AccordionDetails, AccordionSummary, Avatar, Box, Button, CircularProgress, IconButton, List, ListItem, ListItemAvatar, ListItemText, TextField, Typography } from "@mui/material";
+import { Add as AddIcon } from "@mui/icons-material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, CircularProgress, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useParams, useRouter } from "next/navigation.js";
 import { useEffect, useState } from "react";
@@ -50,7 +49,7 @@ const TasksForProjectPage = () => {
   }, []);
 
   useEffect(() => {
-    if(project?.tasks?.length > 0) {
+    if(project?.tasks != null) {
       let tasks = project.tasks;
       tasks = tasks.map(task => ({...task, checked: task.idStatus == 0 ? false : true}));
       setTasks(tasks.reverse());
@@ -80,6 +79,9 @@ const TasksForProjectPage = () => {
                 <AddButton variant="contained" onClick={() => router.push("/")}>
                   <ArrowBackIosIcon fontSize="inherit" />
                 </AddButton>
+                <AddButton variant="contained" onClick={() => console.log("Este componente está bloqueado")}>
+                  <MoreHorizIcon fontSize="inherit" />
+                </AddButton>
               </TaskButton>
               <TaskTitle>
                 <Typography gutterBottom variant="h2" color={"white"}>
@@ -100,6 +102,9 @@ const TasksForProjectPage = () => {
               </TaskButton>
             </TaskContainer>
           </Task>
+        )}        
+        {tasks?.length == 0 && (
+          <EmptyTask>No se encontraron tareas!</EmptyTask>
         )}
         <TasksList>
           {tasks.filter(task => task.idStatus == 0).map((task) => (
@@ -110,24 +115,29 @@ const TasksForProjectPage = () => {
               <ListItemText primary={task.title} />
             </ListItem>
           ))}
-          <Accordion expanded={expanded} elevation={0} onChange={() => setExpanded(!expanded)}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}>
-              <Typography>Completed</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <List>
-                {tasks.filter(task => task.idStatus == 1).map((task) => (
-                  <ListItem key={`task-${task.id}`}>
-                    <ListItemAvatar>
-                      <CheckBox onChange={() => handleCheck(task.id)} checked={task.checked} size='lg' />
-                    </ListItemAvatar>
-                    <ListItemText primary={task.title} sx={{textDecoration: "line-through", color: grey[400]}} />
-                  </ListItem>
-                ))}
-              </List>
-            </AccordionDetails>
-          </Accordion>
+          {tasks?.filter(task => task.idStatus == 0).length > 0 && (
+            <Accordion
+              expanded={expanded}  
+              elevation={0} 
+              onChange={() => setExpanded(!expanded)}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}>
+                <Typography>Completed</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <List>
+                  {tasks.filter(task => task.idStatus == 1).map((task) => (
+                    <ListItem key={`task-${task.id}`}>
+                      <ListItemAvatar>
+                        <CheckBox onChange={() => handleCheck(task.id)} checked={task.checked} size='lg' />
+                      </ListItemAvatar>
+                      <ListItemText primary={task.title} sx={{textDecoration: "line-through", color: grey[400]}} />
+                    </ListItem>
+                  ))}
+                </List>
+              </AccordionDetails>
+            </Accordion>
+          )}
         </TasksList>
       </BaseLayout>
 }

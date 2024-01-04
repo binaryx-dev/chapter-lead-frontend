@@ -83,12 +83,11 @@ export const MoreButton = styled(Button)(({ theme }) => ({
 
 export const EmptyTask = styled((props) => <Alert severity="info" {...props} />)(({ theme }) => ({
   display: "flex",
-  flexDirection: "column",
   paddingTop: theme.spacing(2),
   paddingBottom: theme.spacing(2),
   margin: theme.spacing(3),
   borderRadius: theme.spacing(8),
-  justifyContent: "center",
+  justifyContent: "flex-start",
   alignItems: "flex-start",
   fontSize:"1.2rem",
   "& .MuiAlert-icon": {
