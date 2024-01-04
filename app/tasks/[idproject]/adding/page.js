@@ -54,12 +54,35 @@ const TaskAdding = () => {
   const theme = useTheme();
   const refContent = useRef(null);
   const router = useRouter();
-  const { projects, fetchProjects } = useProject();
+  const { projects, fetchProjects, pushTask } = useProject();
   const [checked, setChecked] = useState(0);
+
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [day, setDay] = useState("today");
 
   const handleCheck = (id = 0) => {
     setChecked(id);
     router.replace(`/tasks/${id}/adding`);
+  }
+
+  const handleCreate = () => {
+    let task ={
+      idProject: checked,
+      title,
+      description,
+      day 
+    }
+    
+    pushTask(task)
+      .then((isSuccess) => {
+        if(isSuccess){
+          setTitle("");
+          setDescription("");
+          setDay("");
+          router.push(`/tasks/${checked}`);
+        }
+      });
   }
 
   useEffect(() => {
@@ -77,7 +100,7 @@ const TaskAdding = () => {
 
   useEffect(() => {
     if (idproject) {
-      setChecked(idproject);
+      setChecked(parseInt(idproject));
     }
   }, [idproject]);
 
@@ -91,33 +114,43 @@ const TaskAdding = () => {
             </CircleButton>
             <Title variant='h3'>New Task</Title>
             <Container>
-              <Button variant="contained" color="secondary" size="large" sx={{marginRight: theme.spacing(1)}}>Today</Button>
-              <Button variant="outlined" color="primary" size="large" sx={{marginRight: theme.spacing(1)}}>Tomorrow</Button>
+              <Button 
+                variant="contained"
+                color={day == "today" ? "secondary" : "primary"} 
+                onClick={() => setDay("today")}
+                size="large" sx={{marginRight: theme.spacing(1)}}>Today</Button>
+              <Button 
+                variant="outlined" 
+                color={day == "tomorrow" ? "secondary" : "primary"} 
+                onClick={() => setDay("tomorrow")}
+                size="large" sx={{marginRight: theme.spacing(1)}}>Tomorrow</Button>
             </Container>
             <Container>
-              <CircleButton variant="outlined" whiteBack onClick={() => router.push("/")}>
+              <CircleButton variant="outlined" onClick={() => router.push("/")}>
                 <MoreTimeIcon fontSize="inherit" />
               </CircleButton>
-              <CircleButton variant="outlined" whiteBack onClick={() => router.push("/")}>
+              <CircleButton variant="outlined" onClick={() => router.push("/")}>
                 <NotificationAddIcon fontSize="inherit" />
               </CircleButton>
             </Container>
             <Container sx={{marginTop: theme.spacing(3)}}>
               <Typography variant="h6" color={"grey"}>PROJECTS</Typography>
             </Container>
-            <Container ref={refContent} horizontal>
+            <Container ref={refContent} horizontal="true">
               <Container >
-                <CircleButton variant={checked == 0 ? "contained" : "outlined"} color={checked == 0 ? "secondary" : "primary"} onClick={() => handleCheck()} small>
+                <CircleButton variant={checked == 0 ? "contained" : "outlined"} color={checked == 0 ? "secondary" : "primary"} onClick={() => console.log("Este componente está bloqueado")} small="true">
                   <AddIcon fontSize="inherit" />
                 </CircleButton>
                 {projects?.map((project) => (
                   <Button
+                    key={`projects-${project.id}`}
                     variant={checked == project.id ? "contained" : "outlined"}
                     color="primary"
                     size="large"
                     onClick={() => handleCheck(project.id)}
                     sx={{
                       marginRight: theme.spacing(1),
+                      whiteSpace: "nowrap",
                       background: checked == project.id 
                         ? `linear-gradient(-45deg, ${project.colorTasks[0]}, ${project.colorTasks[1]}, ${project.colorTasks[2]})` 
                         : "transparent",
@@ -131,15 +164,15 @@ const TaskAdding = () => {
               <Typography variant="h6" color={"grey"}>TITLE</Typography>
             </Container>
             <Container sx={{paddingLeft: theme.spacing(4)}}>
-              <TextField fullWidth variant="outlined" placeholder="Enter a title" />
+              <TextField fullWidth variant="outlined" placeholder="Enter a title" onChange={(e) => setTitle(e.target.value)} />
             </Container>
             <Container sx={{paddingLeft: theme.spacing(4)}}>
-              <TextField fullWidth variant="outlined" placeholder="Enter a description" />
+              <TextField fullWidth variant="outlined" placeholder="Enter a description (Optional)" onChange={(e) => setDescription(e.target.value)} />
             </Container>
           </CardContent>
         </TaskCard>
         <ActionContainer>
-          <Button variant="contained" color="secondary" size="large" fullWidth>Create</Button>
+          <Button variant="contained" color="secondary" size="large" onClick={handleCreate} fullWidth>Create</Button>
         </ActionContainer>
       </CreateContainer>
     </BaseLayout>

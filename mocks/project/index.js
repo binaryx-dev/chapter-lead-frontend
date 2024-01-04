@@ -122,6 +122,48 @@ export const ProjectHandler = [
       );
     }
   }),
+  rest.post(`${API_PREFIX}${TASKS_URL}`, async (req, res, ctx) => {
+    const token = req.headers.get('Authorization');
+    if (!token) {
+      return res(
+        ctx.status(401),
+        ctx.json({ message: 'No se ha encontrado el token de autenticación' })
+      );
+    }
+
+    const user = dummy.users.find((user) => user.token === token.replace('Bearer ', ''));
+    let jsonStr = localStorage.getItem('projects') ?? '[]';
+    let projects = JSON.parse(jsonStr);
+    let project = projects.find(x => x.creator == user?.id && x.id == req.body.idProject);
+
+    if (project === undefined || project === null) {
+      return res(
+        ctx.status(404),
+        ctx.json({ message: 'No se ha encontrado el proyecto' })
+      );
+    }else{
+      let task = {
+        id: project.tasks.length + 1,
+        idProject: project.id,
+        title: req.body.title,
+        description: req.body.description,
+        idStatus: 0,
+        status: 'pendiente',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        finishAt: null,
+      }
+      project.tasks.push(task);
+      project.totalTasks = project.tasks.length;
+      project.pendingTasks = project.tasks.filter(x => x.idStatus == 0).length;
+      project.finishTasks = project.tasks.filter(x => x.idStatus == 1).length;
+      localStorage.setItem('projects', JSON.stringify(projects));
+      return res(
+        ctx.status(200),
+        ctx.json(project)
+      );
+    }
+  }),
 ];
 
 export default ProjectHandler;

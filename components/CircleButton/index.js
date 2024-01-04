@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Button } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
-const CircleButton = styled(Button)(({ theme, small = false }) => ({
+const CircleButton = styled(Button)(({ theme, small }) => ({
   marginRight: theme.spacing(1),
   width: small ? 48 : 64,
   height: small ? 48 : 64,
